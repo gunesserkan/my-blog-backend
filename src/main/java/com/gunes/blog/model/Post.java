@@ -21,9 +21,11 @@ public class Post {
     private Long id;
     @Column(name = "title")
     private String title;
+    @Column(name = "summary")
+    private String summary;
     @Column(name = "content")
     private String content;
-    @Column(name = "post_data")
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
     @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     @JoinColumn(name ="user_id")

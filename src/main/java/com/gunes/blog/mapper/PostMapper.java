@@ -6,6 +6,7 @@ import com.gunes.blog.model.Post;
 public class PostMapper {
     public static PostResponse convertToPostResponseFrom(Post post) {
         return PostResponse.builder()
+                .id(post.getId())
                 .title(post.getTitle())
                 .content(post.getContent())
                 .username(post.getUser().getUsername())

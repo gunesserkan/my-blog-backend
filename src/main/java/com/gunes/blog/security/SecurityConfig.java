@@ -3,8 +3,10 @@ package com.gunes.blog.security;
 
 import com.gunes.blog.service.UserService;
 import jakarta.servlet.FilterChain;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -36,17 +38,17 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
-                .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(x->
-                        x
-                                .requestMatchers("/auth/welcome/**","/auth/addNewUser/**","/auth/generateToken/**").permitAll()
-                                .requestMatchers("/auth/user/**").hasRole("USER")
-                                .requestMatchers("/posts/**").hasRole("USER")
-                                .requestMatchers("/auth/admin/**").hasRole("ADMIN")
+                .csrf(AbstractHttpConfigurer::disable) // CSRF korumasını devre dışı bırak
+                .authorizeHttpRequests(x -> x
+                        .requestMatchers("/api/v1/auth/addNewUser/**", "/api/v1/auth/login/**").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/api/v1/posts/**").permitAll()
+                        .requestMatchers("/api/v1/auth/user/**").hasRole("USER")
+                        .requestMatchers("/api/v1/posts/**").hasRole("USER")
+                        .requestMatchers("/api/v1/auth/admin/**").hasRole("ADMIN")
                 )
-                .sessionManagement(x->x.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authenticationProvider(authenticationProvider())
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .sessionManagement(x -> x.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Oturum yönetimini stateless olarak ayarla
+                .authenticationProvider(authenticationProvider()) // Kendi authentication provider'ını kullan
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class) // JWT filter'ını ekle
                 .build();
     }
 

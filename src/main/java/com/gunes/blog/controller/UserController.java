@@ -10,16 +10,19 @@ import com.gunes.blog.service.PostService;
 import com.gunes.blog.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/v1/auth")
 @Slf4j
 public class UserController {
     private final UserService userService;
@@ -30,37 +33,22 @@ public class UserController {
     public UserController(UserService userService, JwtService jwtService, AuthenticationManager authenticationManager, PostService postService) {
         this.userService = userService;
         this.jwtService = jwtService;
-        this.postService=postService;
+        this.postService = postService;
         this.authenticationManager = authenticationManager;
-    }
-
-    @GetMapping("/welcome")
-    public String welcome() {
-        return "Welcome";
     }
     @PostMapping("/addNewUser")
     public User addNewUser(@RequestBody CreateUserRequest request) {
         return userService.createUser(request);
     }
 
-    @PostMapping("/generateToken")
+    @PostMapping("/login")
     public String generateToken(@RequestBody AuthRequest request) throws Exception {
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(request.username(), request.password()));
         if (authentication.isAuthenticated()) {
             return jwtService.generateToken(authentication.getName());
         }
-        log.info("invalid username"+request.username());
-        throw new UsernameNotFoundException("Invalid username"+request.username());
-    }
-
-    @GetMapping("/user")
-    public String getUserString() {
-        return "this is user";
-    }
-
-    @GetMapping("/admin")
-    public String getAdminString() {
-        return "this is admin";
+        log.info("invalid username" + request.username());
+        throw new UsernameNotFoundException("Invalid username" + request.username());
     }
 }
