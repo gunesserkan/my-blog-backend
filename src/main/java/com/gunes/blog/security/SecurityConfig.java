@@ -40,7 +40,7 @@ public class SecurityConfig {
         return http
                 .csrf(AbstractHttpConfigurer::disable) // CSRF korumasını devre dışı bırak
                 .authorizeHttpRequests(x -> x
-                        .requestMatchers("/api/v1/auth/addNewUser/**", "/api/v1/auth/login/**").permitAll()
+                        .requestMatchers("/api/v1/auth/register/**", "/api/v1/auth/login/**").permitAll()
                         .requestMatchers(HttpMethod.GET,"/api/v1/posts/**").permitAll()
                         .requestMatchers("/api/v1/auth/user/**").hasRole("USER")
                         .requestMatchers("/api/v1/posts/**").hasRole("USER")
