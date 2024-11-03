@@ -23,7 +23,7 @@ import java.security.Principal;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/v1/auth")
+@RequestMapping("/api/v1")
 @Slf4j
 public class UserController {
     private final UserService userService;
@@ -36,7 +36,7 @@ public class UserController {
         this.authenticationManager = authenticationManager;
     }
 
-    @PostMapping("/register")
+    @PostMapping("/auth/register")
     public ResponseEntity<Void> addNewUser(@RequestBody CreateUserRequest request) {
         User savedUser = userService.createUser(request);
         Authentication authentication = authenticationManager
@@ -52,7 +52,7 @@ public class UserController {
         throw new UsernameNotFoundException("Invalid username" + request.username());
     }
 
-    @PostMapping("/login")
+    @PostMapping("/auth/login")
     public ResponseEntity<String> generateToken(@RequestBody AuthRequest request) {
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(request.username(), request.password()));
@@ -62,10 +62,9 @@ public class UserController {
         throw new UsernameNotFoundException("Invalid username" + request.username());
     }
 
-    @GetMapping("/user/{username}")
+    @GetMapping("/profiles/{username}")
     public ResponseEntity<UserResponse> getUserByUsername(@PathVariable("username") String username, Principal principal) {
         String currentUsername = principal.getName();
-        System.out.println("working: " + currentUsername);
         if (currentUsername.equals(username)) {
             Optional<User> requestedUser = userService.getByUsername(username);
             if (requestedUser.isPresent()) {
