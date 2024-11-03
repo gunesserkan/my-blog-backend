@@ -38,17 +38,16 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
-                .csrf(AbstractHttpConfigurer::disable) // CSRF korumasını devre dışı bırak
+                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(x -> x
-                        .requestMatchers("/api/v1/auth/addNewUser/**", "/api/v1/auth/login/**").permitAll()
+                        .requestMatchers("/api/v1/auth/register/**", "/api/v1/auth/login/**").permitAll()
                         .requestMatchers(HttpMethod.GET,"/api/v1/posts/**").permitAll()
-                        .requestMatchers("/api/v1/auth/user/**").hasRole("USER")
+                        .requestMatchers("/api/v1/profiles/**").hasRole("USER")
                         .requestMatchers("/api/v1/posts/**").hasRole("USER")
-                        .requestMatchers("/api/v1/auth/admin/**").hasRole("ADMIN")
                 )
-                .sessionManagement(x -> x.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Oturum yönetimini stateless olarak ayarla
-                .authenticationProvider(authenticationProvider()) // Kendi authentication provider'ını kullan
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class) // JWT filter'ını ekle
+                .sessionManagement(x -> x.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authenticationProvider(authenticationProvider())
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 

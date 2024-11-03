@@ -22,6 +22,7 @@ public class User implements UserDetails {
     private String name;
     private String username;
     private String password;
+    private String email;
 
     private boolean accountNonExpired;
     private boolean isEnable;
@@ -35,7 +36,6 @@ public class User implements UserDetails {
     private Set<Role> authorities;
 
     @OneToMany(mappedBy = "user",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-
     private List<Post> posts;
 
     @Override
