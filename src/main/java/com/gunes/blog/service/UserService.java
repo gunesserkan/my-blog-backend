@@ -2,6 +2,7 @@ package com.gunes.blog.service;
 
 
 import com.gunes.blog.dto.CreateUserRequest;
+import com.gunes.blog.exception.UsernameAlreadyExistsException;
 import com.gunes.blog.model.User;
 import com.gunes.blog.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -26,8 +27,6 @@ public class UserService implements UserDetailsService {
     }
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-
-
         Optional<User> user = userRepository.findByUsername(username);
         return user.orElseThrow(EntityNotFoundException::new);
     }
@@ -36,6 +35,9 @@ public class UserService implements UserDetailsService {
     }
 
     public User createUser(CreateUserRequest request){
+        if (isUsernameExists(request.username())){
+            throw new UsernameAlreadyExistsException("Username already exists"+request.username());
+        }
         User newUser= User.builder()
                 .name(request.name())
                 .username(request.username())
@@ -49,5 +51,8 @@ public class UserService implements UserDetailsService {
                 .build();
 
         return userRepository.save(newUser);
+    }
+    public Boolean isUsernameExists(String username){
+        return userRepository.findByUsername(username).isPresent();
     }
 }
