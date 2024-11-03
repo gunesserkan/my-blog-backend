@@ -42,7 +42,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(x -> x
                         .requestMatchers("/api/v1/auth/register/**", "/api/v1/auth/login/**").permitAll()
                         .requestMatchers(HttpMethod.GET,"/api/v1/posts/**").permitAll()
-                        .requestMatchers("/api/v1/profile/**").hasRole("USER")
+                        .requestMatchers("/api/v1/profiles/**").hasRole("USER")
                         .requestMatchers("/api/v1/posts/**").hasRole("USER")
                 )
                 .sessionManagement(x -> x.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
