@@ -43,7 +43,7 @@ public class UserController {
                 .authenticate(new UsernamePasswordAuthenticationToken(request.username(), request.password()));
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
-                .replacePath("/api/v1/auth/user/{username}")
+                .replacePath("/api/v1/profiles/{username}")
                 .buildAndExpand(savedUser.getUsername())
                 .toUri();
         if (authentication.isAuthenticated()) {
