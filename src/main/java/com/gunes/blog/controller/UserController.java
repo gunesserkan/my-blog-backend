@@ -47,7 +47,9 @@ public class UserController {
                 .buildAndExpand(savedUser.getUsername())
                 .toUri();
         if (authentication.isAuthenticated()) {
-            return ResponseEntity.created(location).header(HttpHeaders.AUTHORIZATION,"Bearer "+jwtService.generateToken(authentication.getName())).build();
+            return ResponseEntity.created(location)
+                    .header(HttpHeaders.AUTHORIZATION,
+                            "Bearer "+jwtService.generateToken(authentication.getName())).build();
         }
         throw new UsernameNotFoundException("Invalid username" + request.username());
     }
