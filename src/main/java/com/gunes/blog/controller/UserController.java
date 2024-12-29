@@ -8,6 +8,7 @@ import com.gunes.blog.mapper.Mapper;
 import com.gunes.blog.model.User;
 import com.gunes.blog.service.JwtService;
 import com.gunes.blog.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -36,7 +37,7 @@ public class UserController {
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
     }
-
+    @Operation(summary = "register a user to the database")
     @PostMapping("/auth/register")
     public ResponseEntity<Void> addNewUser(@RequestBody CreateUserRequest request){
         User savedUser = userService.createUser(request);
@@ -55,6 +56,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
+    @Operation(summary = "authenticates user and returns a jwt token")
     @PostMapping("/auth/login")
     public ResponseEntity<Void> login(@RequestBody AuthRequest request) {
         Authentication authentication = authenticationManager
@@ -65,6 +67,7 @@ public class UserController {
         throw new UsernameNotFoundException("Invalid username" + request.username());
     }
 
+    @Operation(summary = "returns user's informations by id")
     @GetMapping("/profiles/{username}")
     public ResponseEntity<UserResponse> getUserByUsername(@PathVariable("username") String username, Principal principal) {
         String currentUsername = principal.getName();
