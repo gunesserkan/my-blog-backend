@@ -8,6 +8,7 @@ import com.gunes.blog.model.Post;
 import com.gunes.blog.model.User;
 import com.gunes.blog.service.PostService;
 import com.gunes.blog.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -28,18 +29,19 @@ public class PostController {
         this.postService = postService;
         this.userService = userService;
     }
-
+    @Operation(summary = "returns all posts")
     @GetMapping
     public ResponseEntity<Page<PostResponse>> getAllPosts(Pageable pageable) {
         Page<Post> posts = postService.getAll(pageable);
         Page<PostResponse> postResponses = posts.map(Mapper::convertToPostResponseFrom);
         return ResponseEntity.ok(postResponses);
     }
-
+    @Operation(summary = "returns a certain post by its id")
     @GetMapping("/{id}")
     public ResponseEntity<PostResponse> getById(@PathVariable Long id){
         return ResponseEntity.ok(Mapper.convertToPostResponseFrom(postService.getById(id)));
     }
+    @Operation(summary = "creates a post and adds its to the database then returns post's path")
     @PostMapping
     public ResponseEntity<Void> createPost(@RequestBody CreatePostRequest requestedPost, Principal principal) {
         User user = userService.getByUsername(principal.getName()).get();
