@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -21,7 +22,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.security.Principal;
 import java.util.Optional;
 
 @RestController
@@ -37,9 +37,10 @@ public class UserController {
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
     }
+
     @Operation(summary = "register a user to the database")
     @PostMapping("/auth/register")
-    public ResponseEntity<Void> addNewUser(@RequestBody CreateUserRequest request){
+    public ResponseEntity<Void> addNewUser(@RequestBody CreateUserRequest request) {
         User savedUser = userService.createUser(request);
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(request.username(), request.password()));
@@ -62,21 +63,21 @@ public class UserController {
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(request.username(), request.password()));
         if (authentication.isAuthenticated()) {
-            return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION, "Bearer "+jwtService.generateToken(authentication.getName())).build();
+            return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtService.generateToken(authentication.getName())).build();
         }
         throw new UsernameNotFoundException("Invalid username" + request.username());
     }
 
     @Operation(summary = "returns user's informations by id")
     @GetMapping("/profiles/{username}")
-    public ResponseEntity<UserResponse> getUserByUsername(@PathVariable("username") String username, Principal principal) {
-        String currentUsername = principal.getName();
-        if (currentUsername.equals(username)) {
-            Optional<User> requestedUser = userService.getByUsername(username);
-            if (requestedUser.isPresent()) {
-                return ResponseEntity.ok(Mapper.convertToUserResponseFrom(requestedUser.get()));
-            }
+    @PreAuthorize("#username==authentication.name")
+    public ResponseEntity<UserResponse> getUserByUsername(@PathVariable("username") String username) {
+        System.out.println("başarılı");
+        Optional<User> requestedUser = userService.getByUsername(username);
+        if (requestedUser.isPresent()) {
+            return ResponseEntity.ok(Mapper.convertToUserResponseFrom(requestedUser.get()));
         }
+
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
