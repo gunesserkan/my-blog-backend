@@ -44,7 +44,7 @@ public class PostController {
     @Operation(summary = "creates a post and adds its to the database then returns post's path")
     @PostMapping
     public ResponseEntity<Void> createPost(@RequestBody CreatePostRequest requestedPost, Principal principal) {
-        User user = userService.getByUsername(principal.getName()).get();
+        User user = userService.getByUsername(principal.getName());
         Post post = Post.builder()
                 .title(requestedPost.title())
                 .content(requestedPost.content())

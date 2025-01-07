@@ -1,6 +1,7 @@
 package com.gunes.blog.controller;
 
 
+import com.gunes.blog.dto.UpdateUserRequest;
 import com.gunes.blog.dto.UserResponse;
 import com.gunes.blog.mapper.Mapper;
 import com.gunes.blog.model.User;
@@ -9,10 +10,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
@@ -29,12 +27,13 @@ public class UserController {
     @GetMapping("/{username}")
     @PreAuthorize("#username==authentication.name")
     public ResponseEntity<UserResponse> getUserByUsername(@PathVariable("username") String username) {
-        System.out.println("başarılı");
-        Optional<User> requestedUser = userService.getByUsername(username);
-        if (requestedUser.isPresent()) {
-            return ResponseEntity.ok(Mapper.convertToUserResponseFrom(requestedUser.get()));
-        }
+        return ResponseEntity.ok(Mapper.convertToUserResponseFrom(userService.getByUsername(username)));
+    }
 
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+    @Operation(summary = "returns updated user informations")
+    @PutMapping("/{username}")
+    @PreAuthorize("#username==authentication.name")
+    public ResponseEntity<UserResponse> updateUser(@PathVariable("username") String username, @RequestBody UpdateUserRequest updatedUser) {
+        return ResponseEntity.ok(Mapper.convertToUserResponseFrom(userService.updateUser(updatedUser, username)));
     }
 }

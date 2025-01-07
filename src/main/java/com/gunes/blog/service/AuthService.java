@@ -18,6 +18,6 @@ public class AuthService {
 
     public User authenticate(String username, String password) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-        return userService.getByUsername(username).orElseThrow();
+        return userService.getByUsername(username);
     }
 }
