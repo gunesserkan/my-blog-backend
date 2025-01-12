@@ -32,8 +32,15 @@ public class UserController {
 
     @Operation(summary = "returns updated user informations")
     @PutMapping("/{username}")
-    @PreAuthorize("#username==authentication.name")
+    @PreAuthorize("#username==authentication.name or hasRole('ADMIN')")
     public ResponseEntity<UserResponse> updateUser(@PathVariable("username") String username, @RequestBody UpdateUserRequest updatedUser) {
         return ResponseEntity.ok(Mapper.convertToUserResponseFrom(userService.updateUser(updatedUser, username)));
+    }
+    @Operation(summary = "removes user from db by username")
+    @DeleteMapping("/{username}")
+    @PreAuthorize("#username==authentication.name or hasRole('ADMIN')")
+    public ResponseEntity<Void> deleteUser(@PathVariable("username") String username) {
+        userService.deleteUser(username);
+        return ResponseEntity.noContent().build();
     }
 }

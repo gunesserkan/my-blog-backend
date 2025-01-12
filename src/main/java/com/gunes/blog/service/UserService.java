@@ -11,11 +11,14 @@ import com.gunes.blog.model.User;
 import com.gunes.blog.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -68,6 +71,19 @@ public class UserService implements UserDetailsService {
                 .build();
 
         return userRepository.save(newUser);
+    }
+
+    @Transactional
+    public void deleteUser(String username) {
+        int deletedRows = userRepository.deleteByUsername(username);
+        if (deletedRows==0) {
+            throw new UserNotFoundException(username);
+        }
+
+        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
+        if(authentication.getName().equals(username)){
+            SecurityContextHolder.clearContext();
+        }
     }
 
     public Boolean isUsernameExists(String username) {
