@@ -13,12 +13,12 @@ The project includes the classic features of a blog site:
 
 ## Technologies and Tools Used  
 This backend project is developed using the following technologies and tools:  
-- **Programlama Dili:** Java  
+- **Programming Language:** Java  
 - **Framework:** Spring Boot  
-- **Kimlik Doğrulama:** Spring Security  
-- **Veritabanı Erişimi:** JPA/Hibernate  
-- **API Dökümantasyonu:** Swagger  
-- **Proje Yönetimi ve Build Aracı:** Maven  
+- **Authentication:** Spring Security  
+- **Database Access:** JPA/Hibernate  
+- **API Documentation:** Swagger  
+- **Project Management and Build Tool:** Maven  
 
 ---
 
@@ -60,19 +60,19 @@ Swagger Interface:
 [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)  
 
 Swagger screenshot:  
-![Swagger Ekran Görüntüsü](./screanshoots/Swagger.PNG)  
+![Swagger screenshot](./screanshoots/Swagger.PNG)  
 
 ---
 
 ## Database Details  
 The project uses a PostgreSQL database. The default settings are as follows:  
 
-- **Veritabanı Türü:** PostgreSQL  
+- **Database Type:** PostgreSQL  
 - **Host:** `localhost`  
 - **Port:** `5432`  
-- **Veritabanı Adı:** `postgres`  
-- **Kullanıcı Adı:** `postgres`  
-- **parola:** `12345`  
+- **Database Name:** `postgres`  
+- **Username:** `postgres`  
+- **Password:** `12345`  
 
 Key tables used in the project:  
 1. **Users:**  
