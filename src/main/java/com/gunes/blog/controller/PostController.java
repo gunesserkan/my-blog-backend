@@ -32,8 +32,7 @@ public class PostController {
     @Operation(summary = "returns all posts")
     @GetMapping
     public ResponseEntity<Page<PostResponse>> getAllPosts(Pageable pageable) {
-        Page<Post> posts = postService.getAll(pageable);
-        Page<PostResponse> postResponses = posts.map(Mapper::convertToPostResponseFrom);
+        Page<PostResponse> postResponses = postService.getAll(pageable).map(Mapper::convertToPostResponseFrom);
         return ResponseEntity.ok(postResponses);
     }
     @Operation(summary = "returns a certain post by its id")
@@ -44,7 +43,7 @@ public class PostController {
     @Operation(summary = "creates a post and adds its to the database then returns post's path")
     @PostMapping
     public ResponseEntity<Void> createPost(@RequestBody CreatePostRequest requestedPost, Principal principal) {
-        User user = userService.getByUsername(principal.getName()).get();
+        User user = userService.getByUsername(principal.getName());
         Post post = Post.builder()
                 .title(requestedPost.title())
                 .content(requestedPost.content())
@@ -58,4 +57,7 @@ public class PostController {
                 .toUri();
         return ResponseEntity.created(location).build();
     }
+    //TODO 1: put and delete metods will be added
+    //TODO 2:Comment entity and other layers will be added
+    //TODO 3: Response Type will turned into the generic type
 }
