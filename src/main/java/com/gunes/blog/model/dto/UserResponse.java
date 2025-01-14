@@ -1,6 +1,5 @@
-package com.gunes.blog.dto;
+package com.gunes.blog.model.dto;
 
-import com.gunes.blog.model.Post;
 import lombok.Builder;
 
 import java.util.List;

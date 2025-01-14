@@ -1,16 +1,13 @@
 package com.gunes.blog.service;
 
 
-import com.gunes.blog.dto.CreateUserRequest;
-import com.gunes.blog.dto.UpdateUserRequest;
-import com.gunes.blog.dto.UserResponse;
+import com.gunes.blog.model.dto.CreateUserRequest;
+import com.gunes.blog.model.dto.UpdateUserRequest;
 import com.gunes.blog.exception.UserNotFoundException;
 import com.gunes.blog.exception.UsernameAlreadyExistsException;
-import com.gunes.blog.mapper.Mapper;
-import com.gunes.blog.model.User;
+import com.gunes.blog.model.entity.User;
 import com.gunes.blog.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;

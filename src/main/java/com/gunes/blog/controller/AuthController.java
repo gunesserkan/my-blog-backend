@@ -1,30 +1,21 @@
 package com.gunes.blog.controller;
 
 
-import com.gunes.blog.dto.AuthRequest;
-import com.gunes.blog.dto.CreateUserRequest;
-import com.gunes.blog.dto.LoginResponse;
-import com.gunes.blog.dto.UserResponse;
-import com.gunes.blog.mapper.Mapper;
-import com.gunes.blog.model.User;
+import com.gunes.blog.model.dto.AuthRequest;
+import com.gunes.blog.model.dto.CreateUserRequest;
+import com.gunes.blog.model.dto.LoginResponse;
+import com.gunes.blog.model.entity.User;
 import com.gunes.blog.service.AuthService;
 import com.gunes.blog.service.JwtService;
 import com.gunes.blog.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/auth")

@@ -1,7 +1,7 @@
 package com.gunes.blog.service;
 
 
-import com.gunes.blog.model.User;
+import com.gunes.blog.model.entity.User;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;

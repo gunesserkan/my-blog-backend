@@ -1,6 +1,6 @@
 package com.gunes.blog.repository;
 
-import com.gunes.blog.model.Post;
+import com.gunes.blog.model.entity.Post;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

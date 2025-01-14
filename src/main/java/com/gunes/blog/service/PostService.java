@@ -1,19 +1,12 @@
 package com.gunes.blog.service;
 
-import com.gunes.blog.model.Post;
-import com.gunes.blog.model.User;
+import com.gunes.blog.model.entity.Post;
 import com.gunes.blog.repository.PostRepository;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class PostService {

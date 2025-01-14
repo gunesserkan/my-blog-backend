@@ -1,4 +1,4 @@
-package com.gunes.blog.model;
+package com.gunes.blog.model.enums;
 
 import org.springframework.security.core.GrantedAuthority;
 

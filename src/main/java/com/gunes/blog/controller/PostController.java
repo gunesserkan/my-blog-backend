@@ -1,11 +1,11 @@
 package com.gunes.blog.controller;
 
 
-import com.gunes.blog.dto.CreatePostRequest;
-import com.gunes.blog.dto.PostResponse;
-import com.gunes.blog.mapper.Mapper;
-import com.gunes.blog.model.Post;
-import com.gunes.blog.model.User;
+import com.gunes.blog.model.dto.CreatePostRequest;
+import com.gunes.blog.model.dto.PostResponse;
+import com.gunes.blog.model.mapper.Mapper;
+import com.gunes.blog.model.entity.Post;
+import com.gunes.blog.model.entity.User;
 import com.gunes.blog.service.PostService;
 import com.gunes.blog.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;

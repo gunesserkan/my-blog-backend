@@ -1,6 +1,6 @@
 package com.gunes.blog.repository;
 
-import com.gunes.blog.model.User;
+import com.gunes.blog.model.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

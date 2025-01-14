@@ -1,4 +1,4 @@
-package com.gunes.blog.dto;
+package com.gunes.blog.model.dto;
 
 import lombok.Builder;
 

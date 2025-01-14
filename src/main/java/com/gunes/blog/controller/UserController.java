@@ -1,18 +1,14 @@
 package com.gunes.blog.controller;
 
 
-import com.gunes.blog.dto.UpdateUserRequest;
-import com.gunes.blog.dto.UserResponse;
-import com.gunes.blog.mapper.Mapper;
-import com.gunes.blog.model.User;
+import com.gunes.blog.model.dto.UpdateUserRequest;
+import com.gunes.blog.model.dto.UserResponse;
+import com.gunes.blog.model.mapper.Mapper;
 import com.gunes.blog.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/users")

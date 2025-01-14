@@ -1,11 +1,10 @@
-package com.gunes.blog.mapper;
+package com.gunes.blog.model.mapper;
 
-import com.gunes.blog.dto.PostResponse;
-import com.gunes.blog.dto.UserResponse;
-import com.gunes.blog.model.Post;
-import com.gunes.blog.model.User;
+import com.gunes.blog.model.dto.PostResponse;
+import com.gunes.blog.model.dto.UserResponse;
+import com.gunes.blog.model.entity.Post;
+import com.gunes.blog.model.entity.User;
 
-import java.util.Collections;
 import java.util.stream.Collectors;
 
 public class Mapper {

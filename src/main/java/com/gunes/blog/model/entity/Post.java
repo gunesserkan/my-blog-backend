@@ -1,4 +1,4 @@
-package com.gunes.blog.model;
+package com.gunes.blog.model.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

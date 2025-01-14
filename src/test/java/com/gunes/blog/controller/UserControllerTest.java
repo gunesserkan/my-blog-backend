@@ -1,7 +1,7 @@
 package com.gunes.blog.controller;
 
-import com.gunes.blog.dto.CreateUserRequest;
-import com.gunes.blog.model.Role;
+import com.gunes.blog.model.dto.CreateUserRequest;
+import com.gunes.blog.model.enums.Role;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
