@@ -1,7 +1,9 @@
 package com.gunes.blog.model.mapper;
 
+import com.gunes.blog.model.dto.CommentResponse;
 import com.gunes.blog.model.dto.PostResponse;
 import com.gunes.blog.model.dto.UserResponse;
+import com.gunes.blog.model.entity.Comment;
 import com.gunes.blog.model.entity.Post;
 import com.gunes.blog.model.entity.User;
 
@@ -27,6 +29,17 @@ public class Mapper {
                         .stream()
                         .map(Mapper::convertToPostResponseFrom)
                         .collect(Collectors.toList()))
+                .build();
+    }
+
+    public static CommentResponse convertToCommentResponseFrom(Comment comment) {
+        return CommentResponse.builder()
+                .id(comment.getId())
+                .content(comment.getContent())
+                .username(comment.getUser().getUsername())
+                .post(comment.getPost())
+                .createdAt(comment.getCreatedAt())
+                .updatedAt(comment.getUpdatedAt())
                 .build();
     }
 }
