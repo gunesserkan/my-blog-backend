@@ -27,7 +27,9 @@ public class Post {
     private String content;
     @Column(name = "created_at")
     private LocalDateTime createdAt;
-    @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
-    @JoinColumn(name ="user_id")
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
     private User user;
 }
