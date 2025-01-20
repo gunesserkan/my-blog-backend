@@ -26,7 +26,7 @@ public class CommentController {
     public CommentController(CommentService commentService) {
         this.commentService = commentService;
     }
-    //TODO: burada response içerisinde comment->post->user->posts şeklinde oluşan kısır döngü düzeltilecek.
+
     @GetMapping
     @Operation(summary = "Returns all the comments which are related with the current post")
     public ResponseEntity<List<CommentResponse>> getAllComments(@PathVariable Long postId) {
@@ -45,9 +45,9 @@ public class CommentController {
 
     @PostMapping
     @Operation(summary = "Returns a location where the created comment is and the comment")
-    public ResponseEntity<CommentResponse> createComment(@RequestBody CreateCommentRequest createRequest,@PathVariable Long postId, Authentication auth) {
+    public ResponseEntity<CommentResponse> createComment(@RequestBody CreateCommentRequest createRequest, @PathVariable Long postId, Authentication auth) {
         CommentResponse createdComment = Mapper.toCommentResponse(
-                commentService.createComment(createRequest,postId, auth.getName())
+                commentService.createComment(createRequest, postId, auth.getName())
         );
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -59,15 +59,15 @@ public class CommentController {
 
     @PutMapping("/{commentId}")
     @Operation(summary = "Returns the updated comment")
-    public ResponseEntity<CommentResponse> updateComment(@RequestBody UpdateCommentRequest updateRequest, @PathVariable Long commentId,Authentication auth) {
-        CommentResponse updatedComment = Mapper.toCommentResponse(commentService.updateComment(updateRequest, commentId,auth));
+    public ResponseEntity<CommentResponse> updateComment(@RequestBody UpdateCommentRequest updateRequest, @PathVariable Long commentId, Authentication auth) {
+        CommentResponse updatedComment = Mapper.toCommentResponse(commentService.updateComment(updateRequest, commentId, auth));
         return ResponseEntity.ok(updatedComment);
     }
 
     @DeleteMapping("/{commentId}")
     @Operation(summary = "Returns no content response")
-    public ResponseEntity<Void> deleteComment(@PathVariable Long commentId,Authentication auth) {
-        commentService.deleteById(commentId,auth);
+    public ResponseEntity<Void> deleteComment(@PathVariable Long commentId, Authentication auth) {
+        commentService.deleteById(commentId, auth);
         return ResponseEntity.noContent().build();
     }
 }
