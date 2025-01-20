@@ -10,7 +10,7 @@ public record CommentResponse(
         Long id,
         String content,
         String username,
-        Post post,
+        PostResponse post,
         LocalDateTime createdAt,
         LocalDateTime updatedAt
 ) {

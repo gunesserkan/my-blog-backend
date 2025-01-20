@@ -7,8 +7,12 @@ import com.gunes.blog.model.dto.UpdateCommentRequest;
 import com.gunes.blog.model.entity.Comment;
 import com.gunes.blog.model.entity.Post;
 import com.gunes.blog.model.entity.User;
+import com.gunes.blog.model.enums.Role;
 import com.gunes.blog.model.mapper.Mapper;
 import com.gunes.blog.repository.CommentRepository;
+import jakarta.persistence.EntityExistsException;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -26,39 +30,45 @@ public class CommentService {
     public CommentService(CommentRepository commentRepository, PostService postService, UserService userService) {
         this.commentRepository = commentRepository;
         this.postService = postService;
+        this.userService = userService;
     }
 
-    public CommentResponse getById(Long id) {
-        Comment comment = commentRepository.getById(id);
-        return Mapper.convertToCommentResponseFrom(comment);
+    public Comment getById(Long id) {
+        Comment comment = commentRepository.findCommentById(id).orElseThrow(EntityExistsException::new);
+        return comment;
     }
 
-    public List<CommentResponse> getAllComments() {
-        return commentRepository.findAll().stream()
-                .map(comment -> Mapper.convertToCommentResponseFrom(comment))
-                .collect(Collectors.toList());
+    public List<Comment> getAllComments(Long postId) {
+        return commentRepository.findCommentByPostId(postId);
     }
 
-    public CommentResponse createComment(CreateCommentRequest req, String userName) {
+    public Comment createComment(CreateCommentRequest req,Long postId, String userName) {
         User user = userService.getByUsername(userName);
-        Post post = postService.getById(req.postId());
+        Post post = postService.getById(postId);
         Comment comment = Comment.builder()
                 .content(req.content())
                 .user(user)
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
                 .post(post).build();
-        return Mapper.convertToCommentResponseFrom(commentRepository.save(comment));
+        return commentRepository.save(comment);
     }
 
-    public CommentResponse updateComment(UpdateCommentRequest updatedComment,Long commentId) {
-        Comment comment =commentRepository.getById(commentId);
+    public Comment updateComment(UpdateCommentRequest updatedComment, Long commentId, Authentication auth) {
+        Comment comment = commentRepository.getById(commentId);
+        if (!comment.getUser().getUsername().equals(auth.getName()) && !auth.getAuthorities().contains(Role.ROLE_ADMIN)) {
+            throw new AccessDeniedException("You do not have permission to update this comment");
+        }
         comment.setContent(updatedComment.content());
         comment.setUpdatedAt(LocalDateTime.now());
-        return Mapper.convertToCommentResponseFrom(commentRepository.save(comment));
+        return commentRepository.save(comment);
     }
 
-    public void deleteById(Long id) {
+    public void deleteById(Long id, Authentication auth) {
+        Comment comment = commentRepository.getById(id);
+        if (!comment.getUser().getUsername().equals(auth.getName()) && !auth.getAuthorities().contains(Role.ROLE_ADMIN)) {
+            throw new AccessDeniedException("You do not have permission to delete this comment");
+        }
         commentRepository.deleteById(id);
     }
 }

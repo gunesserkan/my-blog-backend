@@ -6,8 +6,6 @@ import com.gunes.blog.model.entity.User;
 import java.time.LocalDateTime;
 
 public record CreateCommentRequest(
-        Long id,
-        String content,
-        Long postId
+        String content
 ) {
 }

@@ -32,12 +32,12 @@ public class Mapper {
                 .build();
     }
 
-    public static CommentResponse convertToCommentResponseFrom(Comment comment) {
+    public static CommentResponse toCommentResponse(Comment comment) {
         return CommentResponse.builder()
                 .id(comment.getId())
                 .content(comment.getContent())
                 .username(comment.getUser().getUsername())
-                .post(comment.getPost())
+                .post(Mapper.convertToPostResponseFrom(comment.getPost()))
                 .createdAt(comment.getCreatedAt())
                 .updatedAt(comment.getUpdatedAt())
                 .build();
