@@ -58,7 +58,7 @@ public class PostService {
 
     public Post updatePost(Long id, UpdatePostRequest updatePostRequest, Authentication auth) {
         Post post = postRepository.findById(id).orElseThrow(EntityNotFoundException::new);
-        if (!post.getUser().getUsername().equals(auth.getName()) || !auth.getAuthorities().contains(Role.ROLE_ADMIN)) {
+        if (!post.getUser().getUsername().equals(auth.getName()) && !auth.getAuthorities().contains(Role.ROLE_ADMIN)) {
             throw new AccessDeniedException("You are not allowed to update this post");
         }
         post.setTitle(updatePostRequest.title());
@@ -69,7 +69,7 @@ public class PostService {
 
     public void deletePost(Long id, Authentication auth) {
         Post post = postRepository.findById(id).orElseThrow(EntityNotFoundException::new);
-        if (!post.getUser().getUsername().equals(auth.getName()) || !auth.getAuthorities().contains(Role.ROLE_ADMIN)) {
+        if (!post.getUser().getUsername().equals(auth.getName()) && !auth.getAuthorities().contains(Role.ROLE_ADMIN)) {
             throw new AccessDeniedException("You are not allowed to update this post");
         }
         postRepository.delete(post);
