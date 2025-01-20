@@ -32,14 +32,14 @@ public class CommentController {
     public ResponseEntity<List<CommentResponse>> getAllComments(@PathVariable Long postId) {
         return ResponseEntity.ok(
                 commentService.getAllComments(postId).stream()
-                        .map(comment -> Mapper.toCommentResponse(comment))
+                        .map(Mapper::toCommentResponse)
                         .collect(Collectors.toList())
         );
     }
 
     @GetMapping("/{commentId}")
     @Operation(summary = "Returns a comment by Id")
-    public ResponseEntity<CommentResponse> getComment(@PathVariable Long postId, @PathVariable Long commentId) {
+    public ResponseEntity<CommentResponse> getComment(@PathVariable Long commentId) {
         return ResponseEntity.ok(Mapper.toCommentResponse(commentService.getById(commentId)));
     }
 

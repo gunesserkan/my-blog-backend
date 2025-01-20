@@ -1,14 +1,11 @@
 package com.gunes.blog.service;
 
-
-import com.gunes.blog.model.dto.CommentResponse;
 import com.gunes.blog.model.dto.CreateCommentRequest;
 import com.gunes.blog.model.dto.UpdateCommentRequest;
 import com.gunes.blog.model.entity.Comment;
 import com.gunes.blog.model.entity.Post;
 import com.gunes.blog.model.entity.User;
 import com.gunes.blog.model.enums.Role;
-import com.gunes.blog.model.mapper.Mapper;
 import com.gunes.blog.repository.CommentRepository;
 import jakarta.persistence.EntityExistsException;
 import org.springframework.security.access.AccessDeniedException;
@@ -17,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class CommentService {
@@ -34,8 +30,7 @@ public class CommentService {
     }
 
     public Comment getById(Long id) {
-        Comment comment = commentRepository.findCommentById(id).orElseThrow(EntityExistsException::new);
-        return comment;
+        return commentRepository.findCommentById(id).orElseThrow(EntityExistsException::new);
     }
 
     public List<Comment> getAllComments(Long postId) {
@@ -55,7 +50,7 @@ public class CommentService {
     }
 
     public Comment updateComment(UpdateCommentRequest updatedComment, Long commentId, Authentication auth) {
-        Comment comment = commentRepository.getById(commentId);
+        Comment comment = commentRepository.findCommentById(commentId).orElseThrow(EntityExistsException::new);
         if (!comment.getUser().getUsername().equals(auth.getName()) && !auth.getAuthorities().contains(Role.ROLE_ADMIN)) {
             throw new AccessDeniedException("You do not have permission to update this comment");
         }
@@ -65,7 +60,7 @@ public class CommentService {
     }
 
     public void deleteById(Long id, Authentication auth) {
-        Comment comment = commentRepository.getById(id);
+        Comment comment = commentRepository.findCommentById(id).orElseThrow(EntityExistsException::new);
         if (!comment.getUser().getUsername().equals(auth.getName()) && !auth.getAuthorities().contains(Role.ROLE_ADMIN)) {
             throw new AccessDeniedException("You do not have permission to delete this comment");
         }
