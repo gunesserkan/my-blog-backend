@@ -1,7 +1,7 @@
 package com.gunes.blog.service;
 
-import com.gunes.blog.model.dto.CreateCommentRequest;
-import com.gunes.blog.model.dto.UpdateCommentRequest;
+import com.gunes.blog.model.dto.request.CreateCommentDto;
+import com.gunes.blog.model.dto.request.UpdateCommentDto;
 import com.gunes.blog.model.entity.Comment;
 import com.gunes.blog.model.entity.Post;
 import com.gunes.blog.model.entity.User;
@@ -37,7 +37,7 @@ public class CommentService {
         return commentRepository.findCommentByPostId(postId);
     }
 
-    public Comment createComment(CreateCommentRequest req,Long postId, String userName) {
+    public Comment createComment(CreateCommentDto req, Long postId, String userName) {
         User user = userService.getByUsername(userName);
         Post post = postService.getById(postId);
         Comment comment = Comment.builder()
@@ -49,7 +49,7 @@ public class CommentService {
         return commentRepository.save(comment);
     }
 
-    public Comment updateComment(UpdateCommentRequest updatedComment, Long commentId, Authentication auth) {
+    public Comment updateComment(UpdateCommentDto updatedComment, Long commentId, Authentication auth) {
         Comment comment = commentRepository.findCommentById(commentId).orElseThrow(EntityExistsException::new);
         if (!comment.getUser().getUsername().equals(auth.getName()) && !auth.getAuthorities().contains(Role.ROLE_ADMIN)) {
             throw new AccessDeniedException("You do not have permission to update this comment");

@@ -1,9 +1,9 @@
-package com.gunes.blog.model.dto;
+package com.gunes.blog.model.dto.response;
 
 import lombok.Builder;
 
 @Builder
-public record LoginResponse(
+public record LoginDto(
         Long id,
         String username
 ) {

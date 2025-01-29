@@ -1,12 +1,14 @@
-package com.gunes.blog.model.dto;
+package com.gunes.blog.model.dto.response;
 
 import lombok.Builder;
 
 import java.util.List;
+
 @Builder
-public record UserResponse(
+public record UserDto(
         String name,
         String username,
         String email,
-        List<PostResponse> posts
-){}
+        List<PostDto> posts
+) {
+}

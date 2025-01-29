@@ -1,6 +1,6 @@
 package com.gunes.blog.controller;
 
-import com.gunes.blog.model.dto.CreateUserRequest;
+import com.gunes.blog.model.dto.request.CreateUserDto;
 import com.gunes.blog.model.enums.Role;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +36,7 @@ class UserControllerTest {
     void shoudReturnLocationAndToken(){
         Set<Role> roles=new HashSet<>();
         roles.add(Role.ROLE_USER);
-        CreateUserRequest request=CreateUserRequest.builder()
+        CreateUserDto request= CreateUserDto.builder()
                 .name("sezer")
                 .username("sezer")
                 .password("klm123")

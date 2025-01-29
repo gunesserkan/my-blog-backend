@@ -1,14 +1,15 @@
 package com.gunes.blog.controller;
 
 
-import com.gunes.blog.model.dto.AuthRequest;
-import com.gunes.blog.model.dto.CreateUserRequest;
-import com.gunes.blog.model.dto.LoginResponse;
+import com.gunes.blog.model.dto.request.AuthDto;
+import com.gunes.blog.model.dto.request.CreateUserDto;
+import com.gunes.blog.model.dto.response.LoginDto;
 import com.gunes.blog.model.entity.User;
 import com.gunes.blog.service.AuthService;
 import com.gunes.blog.service.JwtService;
 import com.gunes.blog.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -33,18 +34,18 @@ public class AuthController {
 
     @Operation(summary = "authenticates user and returns a jwt token")
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@RequestBody AuthRequest request) {
+    public ResponseEntity<LoginDto> login(@Valid @RequestBody AuthDto request) {
         User authenticatedUser = authService.authenticate(request.username(),request.password());
         return ResponseEntity.ok()
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtService.generateToken(authenticatedUser.getUsername()))
-                .body(LoginResponse.builder()
+                .body(LoginDto.builder()
                         .id(authenticatedUser.getId())
                         .username(authenticatedUser.getUsername()).build());
     }
 
     @Operation(summary = "register a user to the database")
     @PostMapping("/register")
-    public ResponseEntity<LoginResponse> addNewUser(@RequestBody CreateUserRequest request) {
+    public ResponseEntity<LoginDto> addNewUser(@Valid @RequestBody CreateUserDto request) {
         User savedUser = userService.createUser(request);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -54,7 +55,7 @@ public class AuthController {
         User authenticatedUser = authService.authenticate(request.username(),request.password());
         return ResponseEntity.created(location)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtService.generateToken(authenticatedUser.getUsername()))
-                .body(LoginResponse.builder()
+                .body(LoginDto.builder()
                         .id(authenticatedUser.getId())
                         .username(authenticatedUser.getUsername()).build());
     }

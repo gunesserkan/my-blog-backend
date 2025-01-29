@@ -1,26 +1,22 @@
 package com.gunes.blog.controller;
 
 
-import com.gunes.blog.model.dto.CreatePostRequest;
-import com.gunes.blog.model.dto.PostResponse;
-import com.gunes.blog.model.dto.UpdatePostRequest;
+import com.gunes.blog.model.dto.request.CreatePostDto;
+import com.gunes.blog.model.dto.response.PostDto;
+import com.gunes.blog.model.dto.request.UpdatePostDto;
 import com.gunes.blog.model.mapper.Mapper;
-import com.gunes.blog.model.entity.Post;
-import com.gunes.blog.model.entity.User;
 import com.gunes.blog.service.PostService;
 import com.gunes.blog.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.security.Principal;
-import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/api/v1/posts")
@@ -35,22 +31,22 @@ public class PostController {
 
     @Operation(summary = "returns all posts")
     @GetMapping
-    public ResponseEntity<Page<PostResponse>> getAllPosts(Pageable pageable) {
-        Page<PostResponse> postResponses = postService.getAll(pageable).map(Mapper::convertToPostResponseFrom);
+    public ResponseEntity<Page<PostDto>> getAllPosts(Pageable pageable) {
+        Page<PostDto> postResponses = postService.getAll(pageable).map(Mapper::convertToPostResponseFrom);
         return ResponseEntity.ok(postResponses);
     }
 
     @Operation(summary = "returns a certain post by its id")
     @GetMapping("/{id}")
-    public ResponseEntity<PostResponse> getById(@PathVariable Long id) {
+    public ResponseEntity<PostDto> getById(@PathVariable Long id) {
         return ResponseEntity.ok(Mapper.convertToPostResponseFrom(postService.getById(id)));
     }
 
     @Operation(summary = "creates a post and adds its to the database then returns post's path")
     @PostMapping
-    public ResponseEntity<PostResponse> createPost(@RequestBody CreatePostRequest createPostRequest, Authentication auth) {
-        PostResponse response = Mapper.convertToPostResponseFrom(
-                postService.create(createPostRequest, auth.getName())
+    public ResponseEntity<PostDto> createPost(@Valid @RequestBody CreatePostDto createPostDto, Authentication auth) {
+        PostDto response = Mapper.convertToPostResponseFrom(
+                postService.create(createPostDto, auth.getName())
         );
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -62,8 +58,8 @@ public class PostController {
 
     @Operation(summary = "Returns the updated post")
     @PutMapping("/{id}")
-    public ResponseEntity<PostResponse> updatePost(@PathVariable Long id, @RequestBody UpdatePostRequest updatePostRequest, Authentication auth) {
-        PostResponse response = Mapper.convertToPostResponseFrom(postService.updatePost(id, updatePostRequest, auth));
+    public ResponseEntity<PostDto> updatePost(@Valid @PathVariable Long id, @RequestBody UpdatePostDto updatePostDto, Authentication auth) {
+        PostDto response = Mapper.convertToPostResponseFrom(postService.updatePost(id, updatePostDto, auth));
         return ResponseEntity.ok(response);
     }
 

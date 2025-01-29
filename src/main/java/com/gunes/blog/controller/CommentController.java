@@ -1,12 +1,13 @@
 package com.gunes.blog.controller;
 
 
-import com.gunes.blog.model.dto.CommentResponse;
-import com.gunes.blog.model.dto.CreateCommentRequest;
-import com.gunes.blog.model.dto.UpdateCommentRequest;
+import com.gunes.blog.model.dto.response.CommentDto;
+import com.gunes.blog.model.dto.request.CreateCommentDto;
+import com.gunes.blog.model.dto.request.UpdateCommentDto;
 import com.gunes.blog.model.mapper.Mapper;
 import com.gunes.blog.service.CommentService;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -29,7 +30,7 @@ public class CommentController {
 
     @GetMapping
     @Operation(summary = "Returns all the comments which are related with the current post")
-    public ResponseEntity<List<CommentResponse>> getAllComments(@PathVariable Long postId) {
+    public ResponseEntity<List<CommentDto>> getAllComments(@PathVariable Long postId) {
         return ResponseEntity.ok(
                 commentService.getAllComments(postId).stream()
                         .map(Mapper::toCommentResponse)
@@ -39,14 +40,14 @@ public class CommentController {
 
     @GetMapping("/{commentId}")
     @Operation(summary = "Returns a comment by Id")
-    public ResponseEntity<CommentResponse> getComment(@PathVariable Long commentId) {
+    public ResponseEntity<CommentDto> getComment(@PathVariable Long commentId) {
         return ResponseEntity.ok(Mapper.toCommentResponse(commentService.getById(commentId)));
     }
 
     @PostMapping
     @Operation(summary = "Returns a location where the created comment is and the comment")
-    public ResponseEntity<CommentResponse> createComment(@RequestBody CreateCommentRequest createRequest, @PathVariable Long postId, Authentication auth) {
-        CommentResponse createdComment = Mapper.toCommentResponse(
+    public ResponseEntity<CommentDto> createComment(@Valid @RequestBody CreateCommentDto createRequest, @PathVariable Long postId, Authentication auth) {
+        CommentDto createdComment = Mapper.toCommentResponse(
                 commentService.createComment(createRequest, postId, auth.getName())
         );
         URI location = ServletUriComponentsBuilder
@@ -59,8 +60,8 @@ public class CommentController {
 
     @PutMapping("/{commentId}")
     @Operation(summary = "Returns the updated comment")
-    public ResponseEntity<CommentResponse> updateComment(@RequestBody UpdateCommentRequest updateRequest, @PathVariable Long commentId, Authentication auth) {
-        CommentResponse updatedComment = Mapper.toCommentResponse(commentService.updateComment(updateRequest, commentId, auth));
+    public ResponseEntity<CommentDto> updateComment(@Valid @RequestBody UpdateCommentDto updateRequest, @PathVariable Long commentId, Authentication auth) {
+        CommentDto updatedComment = Mapper.toCommentResponse(commentService.updateComment(updateRequest, commentId, auth));
         return ResponseEntity.ok(updatedComment);
     }
 

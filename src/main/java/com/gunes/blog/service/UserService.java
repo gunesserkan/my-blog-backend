@@ -1,8 +1,9 @@
 package com.gunes.blog.service;
 
 
-import com.gunes.blog.model.dto.CreateUserRequest;
-import com.gunes.blog.model.dto.UpdateUserRequest;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gunes.blog.model.dto.request.CreateUserDto;
+import com.gunes.blog.model.dto.request.UpdateUserDto;
 import com.gunes.blog.exception.UserNotFoundException;
 import com.gunes.blog.exception.UsernameAlreadyExistsException;
 import com.gunes.blog.model.entity.User;
@@ -26,7 +27,7 @@ public class UserService implements UserDetailsService {
 
     private final BCryptPasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public UserService(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder, ObjectMapper objectMapper) {
         this.userRepository = userRepository;
         this.passwordEncoder = bCryptPasswordEncoder;
     }
@@ -42,7 +43,7 @@ public class UserService implements UserDetailsService {
         return user.orElseThrow(() -> new UserNotFoundException(username));
     }
 
-    public User updateUser(UpdateUserRequest request, String username) {
+    public User updateUser(UpdateUserDto request, String username) {
         User existingUser = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UserNotFoundException(username));
         existingUser.setName(request.name());
@@ -51,7 +52,7 @@ public class UserService implements UserDetailsService {
         return userRepository.save(existingUser);
     }
 
-    public User createUser(CreateUserRequest request) {
+    public User createUser(CreateUserDto request) {
         if (isUsernameExists(request.username())) {
             throw new UsernameAlreadyExistsException("Username already exists" + request.username());
         }
@@ -83,7 +84,7 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    public Boolean isUsernameExists(String username) {
+    private Boolean isUsernameExists(String username) {
         return userRepository.findByUsername(username).isPresent();
     }
 }

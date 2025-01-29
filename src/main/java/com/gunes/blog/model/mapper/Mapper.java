@@ -1,8 +1,8 @@
 package com.gunes.blog.model.mapper;
 
-import com.gunes.blog.model.dto.CommentResponse;
-import com.gunes.blog.model.dto.PostResponse;
-import com.gunes.blog.model.dto.UserResponse;
+import com.gunes.blog.model.dto.response.CommentDto;
+import com.gunes.blog.model.dto.response.PostDto;
+import com.gunes.blog.model.dto.response.UserDto;
 import com.gunes.blog.model.entity.Comment;
 import com.gunes.blog.model.entity.Post;
 import com.gunes.blog.model.entity.User;
@@ -10,8 +10,8 @@ import com.gunes.blog.model.entity.User;
 import java.util.stream.Collectors;
 
 public class Mapper {
-    public static PostResponse convertToPostResponseFrom(Post post) {
-        return PostResponse.builder()
+    public static PostDto convertToPostResponseFrom(Post post) {
+        return PostDto.builder()
                 .id(post.getId())
                 .title(post.getTitle())
                 .content(post.getContent())
@@ -20,8 +20,8 @@ public class Mapper {
                 .build();
     }
 
-    public static UserResponse convertToUserResponseFrom(User user) {
-        return UserResponse.builder()
+    public static UserDto convertToUserResponseFrom(User user) {
+        return UserDto.builder()
                 .name(user.getName())
                 .username(user.getUsername())
                 .email(user.getEmail())
@@ -32,8 +32,8 @@ public class Mapper {
                 .build();
     }
 
-    public static CommentResponse toCommentResponse(Comment comment) {
-        return CommentResponse.builder()
+    public static CommentDto toCommentResponse(Comment comment) {
+        return CommentDto.builder()
                 .id(comment.getId())
                 .content(comment.getContent())
                 .username(comment.getUser().getUsername())

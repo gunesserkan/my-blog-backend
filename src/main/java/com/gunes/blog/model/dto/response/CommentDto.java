@@ -1,15 +1,15 @@
-package com.gunes.blog.model.dto;
+package com.gunes.blog.model.dto.response;
 
 import lombok.Builder;
 
 import java.time.LocalDateTime;
 
 @Builder
-public record CommentResponse(
+public record CommentDto(
         Long id,
         String content,
         String username,
-        PostResponse post,
+        PostDto post,
         LocalDateTime createdAt,
         LocalDateTime updatedAt
 ) {
